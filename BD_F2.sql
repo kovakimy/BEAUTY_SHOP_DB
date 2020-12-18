@@ -19,7 +19,13 @@ BEGIN
 		RAISE EXCEPTION 'Illegal command' 
       					USING HINT = 'DATABASE NOT EXISTS';
 	ELSE
-		PERFORM dblink_exec('user=ugui password=1111 dbname=' || current_database(), 'DROP DATABASE ' || DATABASE_NAME_);
+		PERFORM *
+		FROM pg_stat_activity
+		WHERE datname = DATABASE_NAME_;
+		PERFORM	pg_terminate_backend (pid)
+		FROM	pg_stat_activity
+		WHERE	pg_stat_activity.datname = DATABASE_NAME_;
+		PERFORM dblink_exec('user=ugui password=1111 dbname=' || current_database(), 'DROP DATABASE ' || quote_ident(DATABASE_NAME_));
 	END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -203,7 +209,7 @@ CREATE OR REPLACE FUNCTION FIND_CLIENT_BY_PHONE_NUMBER(F_PN VARCHAR(12))
 	BEGIN
 	IF NOT EXISTS (SELECT C.PHONE_NUMBER 
 				   FROM CLIENTS C 
-				   WHERE S.PHONE_NUMBER = F_PN) THEN
+				   WHERE C.PHONE_NUMBER = F_PN) THEN
 						RAISE EXCEPTION 'Illegal parameter: %', F_PN
       					USING HINT = 'Check your PHONE_NUMBER';
 	END IF;
