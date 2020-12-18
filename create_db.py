@@ -22,12 +22,13 @@ def create_db(name, db_name_screen, cur, con):
         mb.showerror("Error", "Failed to create db.")
     else:
         try:
-            cur.execute('CREATE DATABASE {};'.format(name))
+            cur.execute(open("BD_F2.sql", "r").read())
+            cur.execute("SELECT CREATE_DATABASE('{}')".format(name))
             new_con = psycopg2.connect(host='localhost', database=name, port=5432, user='ugui', password='1111')
             new_con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             new_cur = new_con.cursor()
             new_cur.execute(open("BD_F2.sql", "r").read())
-            new_cur.execute("SELECT CREATE_TABLES();")
+            new_cur.execute("SELECT CREATE_TABLES();".format())
             print('Created!')
         except:
             print('Failed to create db.')

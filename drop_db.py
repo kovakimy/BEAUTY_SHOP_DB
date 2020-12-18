@@ -34,7 +34,8 @@ def drop_db(name, db_name_screen, cur, con):
         mb.showerror("Error", "Failed to drop db.")
     else:
         try:
-            cur.execute('DROP DATABASE {};'.format(name))
+            cur.execute(open("BD_F2.sql", "r").read())
+            cur.execute("SELECT DROP_DATABASE('{}')".format(name))
             print('Dropped!')
         except:
             print('Failed to drop db.')
