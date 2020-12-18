@@ -88,11 +88,17 @@ def get_data(name, screen, cur, con):
     btn_delete = tk.Button(db_screen, text="Delete", command=lambda: delete_row(name, cur, con, lbox))
     btn_delete.place(relheight=0.05, relwidth=0.2, relx=0.8, rely=0.2)
 
+    entry_delete_field = tk.Entry(db_screen)
+    entry_delete_field.place(relheight=0.05, relwidth=0.2, relx=0.8, rely=0.25)
+
+    btn_delete_field = tk.Button(db_screen, text="Delete_by_field", command=lambda: delete_row_by_field(name, cur, con, lbox, entry_delete_field))
+    btn_delete_field.place(relheight=0.05, relwidth=0.2, relx=0.8, rely=0.3)
+
     btn_update = tk.Button(db_screen, text="Update", command=lambda: update_row(name, cur, con, lbox))
-    btn_update.place(relheight=0.05, relwidth=0.2, relx=0.8, rely=0.25)
+    btn_update.place(relheight=0.05, relwidth=0.2, relx=0.8, rely=0.35)
 
     btn_clean = tk.Button(db_screen, text="Clean", command=lambda: clean_table(name, cur, con, lbox))
-    btn_clean.place(relheight=0.05, relwidth=0.2, relx=0.8, rely=0.3)
+    btn_clean.place(relheight=0.05, relwidth=0.2, relx=0.8, rely=0.4)
 
     screen.destroy()
     db_screen.mainloop()
@@ -129,7 +135,7 @@ def print_full_data(name, cur, con, lbox):
 
 
 def add_data(name, cur, con, lbox):
-    call_func = call_func = 'add_data_' + name.lower()
+    call_func = 'add_data_' + name.lower()
     globals()[call_func](name, cur, con, lbox)
 
 
@@ -210,7 +216,7 @@ def add_data_discount_card(name, cur, con, lbox):
 
 
 def find_record(entry_find, name, cur, con, lbox):
-    call_func = call_func = 'find_record_' + name.lower()
+    call_func = 'find_record_' + name.lower()
     globals()[call_func](entry_find, name, cur, con, lbox)
 
 
@@ -297,7 +303,7 @@ def find_record_discount_card(entry_find, name, cur, con, lbox):
 
 
 def delete_row(name, cur, con, lbox):
-    call_func = call_func = 'delete_row_' + name.lower()
+    call_func = 'delete_row_' + name.lower()
     globals()[call_func](name, cur, con, lbox)
 
 
@@ -330,7 +336,7 @@ def delete_row_discount_card(name, cur, con, lbox):
 
 
 def update_row(name, cur, con, lbox):
-    call_func = call_func = 'update_row_' + name.lower()
+    call_func = 'update_row_' + name.lower()
     globals()[call_func](name, cur, con, lbox)
 
 
@@ -431,4 +437,30 @@ def update_row_records_btn(name, cur, con, lbox, screen, array_entry, id):
 
 
 def update_row_discount_card(name, cur, con, lbox):
+    pass
+
+def delete_row_by_field(name, cur, con, lbox, entry_delete_field):
+    call_func = 'delete_row_by_field_' + name.lower()
+    globals()[call_func](name, cur, con, lbox, entry_delete_field)
+
+    
+def delete_row_by_field_specialists(name, cur, con, lbox, entry_delete_field):
+    cur.execute(open('BD_F2.sql', 'r').read())
+    cur.execute("SELECT DELETE_SPECIALIST_BY_NAME('{}')".format(entry_delete_field.get()))
+    print_full_data(name, cur, con, lbox)
+
+
+def delete_row_by_field_clients(name, cur, con, lbox, entry_delete_field):
+    cur.execute(open('BD_F2.sql', 'r').read())
+    cur.execute("SELECT DELETE_CLIENT_BY_NAME('{}')".format(entry_delete_field.get()))
+    print_full_data(name, cur, con, lbox)
+
+
+def delete_row_by_field_records(name, cur, con, lbox, entry_delete_field):
+    cur.execute(open('BD_F2.sql', 'r').read())
+    cur.execute("SELECT DELETE_RECORD_BY_DATE('{}')".format(entry_delete_field.get()))
+    print_full_data(name, cur, con, lbox)
+
+
+def delete_row_by_field_discount_cards(name, cur, con, lbox, entry_delete_field):
     pass
