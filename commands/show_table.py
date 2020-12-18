@@ -111,7 +111,7 @@ def clean_table(name, cur, con, lbox):
 
 def print_full_data(name, cur, con, lbox):
     lbox.delete(0, tk.END)
-    cur.execute('SELECT * FROM "{}" LIMIT 20'.format(name))
+    cur.execute('SELECT * FROM "{}"'.format(name))
     list_rows_data = cur.fetchall()
     cur.execute("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{}';".format(name))
     list_names_raw = cur.fetchall()
@@ -400,7 +400,7 @@ def update_row_clients(name, cur, con, lbox):
 
 
 def update_row_clients_btn(name, cur, con, lbox, screen, array_entry, id):
-    cur.execute("SELECT UPDATE_CLIENT('{}', '{}', '{}', '{}', '{}', '{}')".format(id, array_entry[0].get(), array_entry[1].get(), array_entry[2].get(), array_entry[3].get(), array_entry[4]))
+    cur.execute("SELECT UPDATE_CLIENT('{}', '{}', '{}', '{}', '{}', '{}')".format(id, array_entry[0].get(), array_entry[1].get(), array_entry[2].get(), array_entry[3].get(), array_entry[4].get()))
     print_full_data(name, cur, con, lbox)
     screen.destroy()
 
@@ -425,7 +425,7 @@ def update_row_records(name, cur, con, lbox):
         field.grid(row=1, column=i)
         field.insert(0, array_to_insert[i])
     btn_add = tk.Button(add_screen, text="Update",
-                        command=lambda: update_row_clients_btn(name, cur, con, lbox, add_screen, array_entry, index))
+                        command=lambda: update_row_records_btn(name, cur, con, lbox, add_screen, array_entry, index))
     btn_add.grid(row=2)
     add_screen.mainloop()
 
